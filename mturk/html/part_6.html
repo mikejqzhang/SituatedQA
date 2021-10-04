@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>GeoQA Annotations</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <style>
+      #wikipedia-pane {
+          height: 600px;
+          padding-top: 0px;
+          padding-right: 0px;
+          padding-bottom: 0px;
+          padding-left: 0px;
+          overflow: auto;
+      }
+      
+      #loading-pane {
+          background-color: #EBDEF0;
+          height: 600px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 15px;
+          padding-bottom: 0px;
+          padding-left: 15px;
+      }
+
+      #results-pane {
+          background-color: #EBDEF0;
+          height: 600px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 15px;
+          padding-bottom: 0px;
+          padding-left: 15px;
+      }
+
+      #searchResultsVis span {
+          cursor: pointer;
+          color: blue;
+          text-decoration: underline;
+      }
+      #searchResultsVis span:hover {
+          text-decoration: none;
+      }
+      #searchResultsVis p {
+          padding-left: 25px;
+      }
+
+      #instructions-pane {
+          background-color: #EBDEF0;
+          height: 600px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 15px;
+          padding-bottom: 0px;
+          padding-left: 15px;
+      }
+      
+      #left-pane {
+          background-color: #EEEEEE;
+          height: 650px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 0px;
+          padding-bottom: 0px;
+          padding-left: 0px;
+      }
+
+      #right-pane {
+          background-color: #EEEEEE;
+          height: 650px;
+          overflow: auto;
+      }
+
+      #navbar {
+          height: 50px;
+      }
+      
+      hr {
+          height: 1px;
+          background-color: #ccc;
+          border: none;
+      }
+
+      .list-group {
+          padding-left: 40px;
+      }
+
+      .list-group-item {
+          padding-left: 40px;
+          padding-right: 20px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div role="main" class="container-fluid">
+      <div class="row">
+        <div class="col-8" id="left-pane">
+          <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown active">
+                  <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    View Suggested Articles Here
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">${SEARCH_RESULTS}</div>
+                </li>
+              </ul>
+              <div class="input-group">
+                <input id="searchInput" type="text" class="form-control" placeholder="Search for new articles here" autocomplete="off">
+                <span class="input-group-append">
+                  <button id="newSearchBtn" class="btn btn-success" type="button">New Search</button>
+                  <button id="viewResultsBtn" class="btn text-nowrap btn-primary">Toggle Search Results</button>
+                  <button id="viewInstructionsBtn" class="btn text-nowrap btn-danger">Toggle Instructions</button>
+                </span>
+              </div>
+            </div>
+          </nav>
+          <div id="instructions-pane">
+            <br/>
+            <h1>Instructions:</h1>
+            <div class="my-3 pl-5">
+              <ul>
+                <li>
+                  Help us make search systems (i.e. Google) smarter by teaching them to properly handle questions whose answer changes based on the asker's location.
+                </li>
+                <li>
+                  For example, the question <i>"Who is the president?"</i> has a different answer if the asker is in the US or if they're in Brazil since both countries have presidents.
+                </li>
+                <li>
+                  In this task, you will be asked to <b>verify</b> responses to "What locations have different answers to this question?"
+                </li>
+                <li>
+                  <b>Read through these instructions and examples below to get started!</b>
+                </li>
+              </ul>
+              <h5>Steps:</h5>
+              <ol>
+                <li class="my-2">
+                  <b>Read each response</b> and use the <b>suggested wikipedia articles in the dropdown menu above</b> to determine whether each response is correct or not.
+                </li>
+                <ul>
+                  <li>You may also <b>use the search bar above</b> to find an article.</li>
+                  <li>Click the <b>New Search</b> button to enter your search.</li>
+                  <li>We will then show you Google's top suggested Wikipedia articles for your query.</li>
+                </ul>
+                <li class="my-2">
+                  <b>Verify the location + answer(s) pair</b> by marking it as correct or incorrect
+                  <ul>
+                    <li>Some questions will have multiple answers, mark yes/no based on whether <b>all answers</b> are correct.
+                  </ul>
+                </li>
+                <li class="my-2">
+                  <b>If there are less than 2 verified responses, please provide up to 2 additional location + answer pairs.</b>
+                  <ul>
+                    <li>All locations and answers should be different. This includes the locations and answers from the verified responses.</li>
+                    <li>If you cannot find another location + answer pair, mark it by selecting the checkbox and move on. <b>This should be a rare occurance.</b></li>
+                  </ul>
+                </li>
+                <li class="my-2">
+                  <b>Submit</b> the HIT by clicking the button at the bottom form to the right.
+                </li>
+              </ol>
+            </div>
+            <hr/>
+            <fieldset disabled>
+              <div class="alert text-dark" style="background-color: #EEEEEE">
+                <h3>Example 1:</h3>
+                <div class="row">
+                  <div class="col-6">
+                    <b>Question:</b>
+                    <p class="pl-4"><b><i>When did we last get to the finals of the FIFA Men's World Cup?</i></b></p>
+                  </div>
+                  <div class="col-6">
+                    <b>Explanation:</b>
+                    <ul>
+                      <li>The USA has never made it to the finals, therefore the location+answer pair is not correct.</li>
+                      <li>Brazil made it to the finals in 2002 where they won.</li>
+                      <li>Croatia made it to the finals in 2018 where they were the runner up.</li>
+                    </ul>
+                  </div>
+                </div>
+                <hr/>
+                <div class="row">
+                  <div class="col-4">
+                    <h5>Is This Location + Answer Pair Correct?</h5>
+                    <ul>
+                      <li>
+                        <b>Location:</b>
+                        <br/>
+                        <span>USA<span>
+                      </li>
+                      <li>
+                        <b>Answer(s):</b>
+                        <br/>
+                        <ul><li>2000</li></ul>
+                      </li>
+                    </ul>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input orig-verify" type="radio" value="Yes" autocomplete="off">
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input orig-verify" type="radio" value="No" autocomplete="off" checked>
+                        No
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <h5>New Location #1</h5>
+                    <div class="form-check my-2 pl-4">
+                    </div>
+                    <ul>
+                      <li>
+                        <input class="form-check-input pl-4" type="checkbox" value="" autocomplete="off">
+                        <label class="form-check-label">
+                          There is no other location that has a different answer to the question.
+                        </label>
+                      </li>
+                      <li class="my-2">
+                        <label>
+                          Enter a possible <b>location #1</b> here
+                        </label>
+                        <input type="text" class="form-control form-field" value="Brazil" autocomplete="off">
+                      </li>
+                      <li>
+                        <label class="my-2">Copy the <b>answer from location #1</b> here</label>
+                        <input type="text" class="form-control form-field" value="2002" autocomplete="off">
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <h5>New Location #2</h5>
+                    <div class="form-check my-2 pl-4">
+                    </div>
+                    <ul>
+                      <li>
+                        <input class="form-check-input pl-4" type="checkbox" value="" autocomplete="off">
+                        <label class="form-check-label">
+                          There is no other location that has a different answer to the question.
+                        </label>
+                      </li>
+                      <li class="my-2">
+                        <label>
+                          Enter a possible <b>location #2</b> here
+                        </label>
+                        <input type="text" class="form-control form-field" value="Croatia" autocomplete="off">
+                      </li>
+                      <li>
+                        <label class="my-2">Copy the <b>answer from location #2</b> here</label>
+                        <input type="text" class="form-control form-field" value="2018" autocomplete="off">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="alert text-dark" style="background-color: #EEEEEE">
+                <h3>Example 2:</h3>
+                <div class="row">
+                  <div class="col-6">
+                    <b>Question:</b>
+                    <p class="pl-4"><b><i>When was social security enacted?</i></b></p>
+                  </div>
+                  <div class="col-6">
+                    <b>Explanation:</b>
+                    <ul>
+                      <li>Social security was inacted in the US in the Social Security Act of 1935 which was passed on August 14th, 1935.</li>
+                      <li>Social security was inacted in the UK in the Ministry of Social Security Act 1966 .</li>
+                      <li>Social security was inacted in the Austrialia in the Social Security Act 1991.</li>
+                    </ul>
+                  </div>
+                </div>
+                <hr/>
+                <div class="row">
+                  <div class="col-4">
+                    <h5>Is This Location + Answer Pair Correct?</h5>
+                    <ul>
+                      <li>
+                        <b>Location:</b>
+                        <br/>
+                        <span>US<span>
+                      </li>
+                      <li>
+                        <b>Answer(s):</b>
+                        <br/>
+                        <ul><li>1935</li><li>August 14, 1935</li></ul>
+                      </li>
+                    </ul>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input orig-verify" type="radio" value="Yes" autocomplete="off" checked>
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input orig-verify" type="radio" value="No" autocomplete="off">
+                        No
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <h5>New Location #1</h5>
+                    <div class="form-check my-2 pl-4">
+                    </div>
+                    <ul>
+                      <li>
+                        <input class="form-check-input pl-4" type="checkbox" value="" autocomplete="off">
+                        <label class="form-check-label">
+                          There is no other location that has a different answer to the question.
+                        </label>
+                      </li>
+                      <li class="my-2">
+                        <label>
+                          Enter a possible <b>location #1</b> here
+                        </label>
+                        <input type="text" class="form-control form-field" value="UK" autocomplete="off">
+                      </li>
+                      <li>
+                        <label class="my-2">Copy the <b>answer from location #1</b> here</label>
+                        <input type="text" class="form-control form-field" value="1966" autocomplete="off">
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <h5>New Location #2</h5>
+                    <div class="form-check my-2 pl-4">
+                    </div>
+                    <ul>
+                      <li>
+                        <input class="form-check-input pl-4" type="checkbox" value="" autocomplete="off">
+                        <label class="form-check-label">
+                          There is no other location that has a different answer to the question.
+                        </label>
+                      </li>
+                      <li class="my-2">
+                        <label>
+                          Enter a possible <b>location #2</b> here
+                        </label>
+                        <input type="text" class="form-control form-field" value="Australia" autocomplete="off">
+                      </li>
+                      <li>
+                        <label class="my-2">Copy the <b>answer from location #2</b> here</label>
+                        <input type="text" class="form-control form-field" value="1991" autocomplete="off">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div id="results-pane" style="display: none;">
+            <br/>
+            <h1>Search Results:</h1>
+            <div class="alert alert-primary my-2">
+              <h3>Showing Results For: <u id="searchQueryVis">Enter a new search above</u></h3>
+            </div>
+            <div id="searchResultsVis"> </div>
+          </div>
+          <iframe id="wikipedia-pane" class="container-fluid" frameBorder="0" style="display: none;"></iframe>
+        </div>
+        <div class="col-4" id="right-pane">
+          <div id="fakeForm">${ANSWERS}
+            <hr/>
+            <h5><b>Question:</b> ${QUESTION}</h5>
+            <br/>
+            <h5>New Location #1</h5>
+            <i>(Only necessary there are less than 2 valid responses above)</i>
+            <div class="form-check my-2 pl-4">
+            </div>
+            <ul>
+              <li>
+                <input class="form-check-input pl-4" type="checkbox" value="" id="missing1" name="missing1" autocomplete="off">
+                <label class="form-check-label">
+                  There is no other location that has a different answer to the question.
+                </label>
+              </li>
+              <li class="my-2">
+                <label>
+                  Enter a possible <b>location #1</b> here
+                </label>
+                <input type="text" class="form-control form-field" id="location1" name="location1" placeholder="Location #1" autocomplete="off">
+              </li>
+              <li>
+                <label class="my-2">Copy the <b>answer from location #1</b> here</label>
+                <input type="text" id="answer1" name="answer1" class="form-control form-field" placeholder="Answer from Location #1" autocomplete="off">
+              </li>
+            </ul>
+            <hr/>
+            <h5><b>Question:</b> ${QUESTION}</h5>
+            <br/>
+            <h5>New Location #2</h5>
+            <i>(Only necessary there is less than 2 valid responses, including the one added by you above)</i>
+            <div class="form-check my-2 pl-4">
+            </div>
+            <ul>
+              <li>
+                <input class="form-check-input pl-4" type="checkbox" value="" id="missing2" name="missing2" autocomplete="off">
+                <label class="form-check-label">
+                  There is no other location that has a different answer to the question.
+                </label>
+              </li>
+              <li class="my-2">
+                <label>
+                  Enter a possible <b>location #2</b> here
+                </label>
+                <input type="text" class="form-control form-field" id="location2" name="location2" placeholder="Location #2" autocomplete="off">
+              </li>
+              <li>
+                <label class="my-2">Copy the <b>answer from location #2</b> here</label>
+                <input type="text" id="answer2" name="answer2" class="form-control form-field" placeholder="Answer from Location #2" autocomplete="off">
+              </li>
+            </ul>
+            <div class="alert alert-danger" id='submitErrorAlert' style="display: none;">
+              <h5>Please review the instructions and make sure that:</h5>
+              <ul>
+                <li>All reponses are verified as correct or incorrect.</li>
+                <li>If there only 0 or 1 correct verified responses, provide up to two additional responses.</li>
+              </ul>
+            </div>
+          </div>
+          <input id="queriesUsed" name="queriesUsed" type='hidden' readOnly />
+          <input id="articlesUsed" name="articlesUsed" type='hidden' readOnly />
+          <form id="mturkForm" name="mturk_form" method="post" autocomplete="off">
+            <div class="form-group">
+              <input id="assignmentId" name="assignmentId" type='hidden' readOnly />
+              <input id="hitId" name="hitId" type='hidden' readOnly />
+              <input id="workerId" name="workerId" type='hidden' readOnly />
+              <input id="answerData" name="answerData" type='hidden' readOnly />
+            </div>
+          </form>
+          <button class="btn btn-primary my-2" type="button" id='submitResponse'>
+            Submit HIT
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <script>
+      function turkGetParam( name, defaultValue ) { 
+          var regexS = "[\?&]"+name+"=([^&#]*)"; 
+          var regex = new RegExp( regexS ); 
+          var tmpURL = window.location.href; 
+          var results = regex.exec( tmpURL ); 
+          if( results == null ) { 
+              return defaultValue; 
+          } else { 
+              return results[1];    
+          } 
+      }
+      
+      function decode(strToDecode)
+      {
+          var encoded = strToDecode;
+          return unescape(encoded.replace(/\+/g,  " "));
+      }
+      
+      function turkGetSubmitToHost() {
+          var defaultHost = "https://www.mturk.com";
+          var submitToHost = decode(turkGetParam("turkSubmitTo", defaultHost));
+          if (stringStartsWith(submitToHost, "https://")) {
+              return submitToHost;
+          }
+          if (stringStartsWith(submitToHost, "http://")) {
+              return submitToHost;
+          }
+          if (stringStartsWith(submitToHost, "//")) {
+              return submitToHost;
+          }
+          return defaultHost;
+      }
+      
+      // Inlined functionality for String.startsWith as IE does not support that method.
+      // Function body from:
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill
+      function stringStartsWith(str, search, pos) {
+          pos = (!pos || pos < 0) ? 0 : +pos;
+          return str.substring(pos, pos + search.length) === search;
+      }
+
+      function newSearchCallback(responseJSON) {
+          $("#searchQueryVis").text(responseJSON.queries.request[0].searchTerms);
+          $("#searchResultsVis").empty();
+          responseJSON.items.map(ex => {
+              $("#searchResultsVis").append("<span class='searchResult' href='"+ ex.link + "'>" + ex.htmlTitle + "</a>");
+              $("#searchResultsVis").append("<p>" + ex.htmlSnippet + "</p>");
+          });
+          $("#searchResultsVis span").click(function() {
+              let usedArticles = [];
+              if ($("#articlesUsed").val()) {
+                  usedArticles = JSON.parse($("#articlesUsed").val());
+              };
+              usedArticles.push({"link": $(this).attr("href"), "title": $(this).text()});
+              $("#articlesUsed").val(JSON.stringify(usedArticles)); 
+              $("#wikipedia-pane").attr("src", $(this).attr("href"));
+              $('#instructions-pane').hide();
+              $('#results-pane').hide();
+              $('#loading-pane').hide();
+              $('#wikipedia-pane').show();
+          });
+          $('#instructions-pane').hide();
+          $('#wikipedia-pane').hide();
+          $('#loading-pane').hide();
+          $('#results-pane').show();
+      }
+
+      $(document).ready(function() {
+          $(".search-result").click(function() {
+              $("#wikipedia-pane").attr("src", $(this).attr("href"));
+              $('#instructions-pane').hide();
+              $('#wikipedia-pane').show();
+          });
+          $("#newSearchBtn").click(function() {
+              let search_query = $("#searchInput").val();
+              if ($("#searchQueryVis").text() == $("#searchInput").val()) {
+                  $('#wikipedia-pane').hide();
+                  $('#loading-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#results-pane').show();
+              } else {
+                  let usedQueries = []
+                  if ($("#queriesUsed").val()) {
+                      usedQueries = JSON.parse($("#queriesUsed").val());
+                  }
+                  usedQueries.push(search_query)
+                  $("#queriesUsed").val(JSON.stringify(usedQueries)); 
+                  // ADD PERSONAL API KEYS HERE
+                  let query_url = ("https://www.googleapis.com/customsearch/v1?"
+                                   + "key=API_KEY_HERE&"
+                                   + "cx=CX_KEY_HERE&"
+                                   + "q=" + escape(search_query));
+                  $('#instructions-pane').hide();
+                  $('#wikipedia-pane').hide();
+                  $('#results-pane').hide();
+                  $('#loading-pane').show();
+                  $.getJSON(query_url, newSearchCallback);
+              }
+          });
+          $("#viewResultsBtn").click(function() {
+              if ($('#results-pane').is(":hidden") && $('#searchResultsVis').children().length > 0) {
+                  $('#wikipedia-pane').hide();
+                  $('#loading-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#results-pane').show();
+              } else if ($('#wikipedia-pane')[0].src) {
+                  $('#loading-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#wikipedia-pane').show();
+              } else {
+                  $('#loading-pane').hide();
+                  $('#wikipedia-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').show();
+              }
+          });
+          $("#viewInstructionsBtn").click(function() {
+              if ($('#instructions-pane').is(":hidden")) {
+                  $('#wikipedia-pane').hide();
+                  $('#loading-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').show();
+              } else if ($('#wikipedia-pane')[0].src) {
+                  $('#loading-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#wikipedia-pane').show();
+              } else if ($('#searchResultsVis').children().length > 0) {
+                  $('#loading-pane').hide();
+                  $('#wikipedia-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#results-pane').show();
+              }
+          });
+          $("#missing1").click(function() {
+              if ($(this).is(':checked')) {
+                  $("#location1").prop("disabled", true);
+                  $("#answer1").prop("disabled", true);
+              } else {
+                  $("#location1").prop("disabled", false);
+                  $("#answer1").prop("disabled", false);
+              }
+          });
+          $("#missing2").click(function() {
+              if ($(this).is(':checked')) {
+                  $("#location2").prop("disabled", true);
+                  $("#answer2").prop("disabled", true);
+              } else {
+                  $("#location2").prop("disabled", false);
+                  $("#answer2").prop("disabled", false);
+              }
+          });
+          $("#submitResponse").click(function() {
+              var num_correct = 0;
+              $("input.is_correct_input:checked").each(function() {
+                  num_correct += $(this).val() == "Yes";
+              });
+              if ($("input.is_correct_input:checked").length != $("input.is_correct_input:not(:checked)").length) {
+                  $("#submitErrorAlert").show();
+              } else if (num_correct >= 3) {
+                  submitHIT();
+              } else if (($("#missing1").is(':checked') || ($("#location1").val() && $("#answer1").val()))
+                         && ($("#missing2").is(':checked') || ($("#location2").val() && $("#answer2").val()))) {
+                  submitHIT();
+              } else {
+                  $("#submitErrorAlert").show();
+              }
+          });
+      });
+
+      function submitHIT() {
+          $("#mturkForm")[0].action = turkGetSubmitToHost() + "/mturk/externalSubmit";
+          $("#assignmentId").val(turkGetParam('assignmentId', ""));
+          $("#hitId").val(turkGetParam('hitId', ""));
+          $("#workerId").val(turkGetParam('workerId', ""));
+          let all_answer_data = {
+              "is_correct": $("input.is_correct_input:checked").map(function() {return this.value;}).toArray(),
+              "is_missing_1": $("#missing1").is(":checked"),
+              "new_location_1": $("#location1").val(),
+              "new_answer_1": $("#answer1").val(),
+              "is_missing_2": $("#missing2").is(":checked"),
+              "new_location_2": $("#location2").val(),
+              "new_answer_2": $("#answer2").val(),
+              "all_queries_used": JSON.parse($("#queriesUsed").val() || null),
+              "all_articles_used": JSON.parse($("#articlesUsed").val() || null),
+              'assignment_id': $("#assignmentId").val(),
+              'worker_id': $("#workerId").val(),
+          };
+          $("#answerData").val(JSON.stringify(all_answer_data));
+          $("#mturkForm").submit();
+      }
+      </script>
+  </body>
+</html>

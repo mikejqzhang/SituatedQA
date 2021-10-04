@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>GeoQA Annotations</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <style>
+      #instructions-pane {
+          background-color: #EBDEF0;
+          height: 650px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 15px;
+          padding-left: 15px;
+      }
+      
+      #right-pane {
+          background-color: #EEEEEE;
+          height: 650px;
+          overflow: auto;
+      }
+
+      .list-group {
+          padding-left: 30px;
+          padding-top: 15px;
+      }
+
+      .list-group-item {
+          padding-left: 40px;
+          padding-right: 20px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+
+      hr {
+          height: 1px;
+          background-color: #ccc;
+          border: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div role="main" class="container-fluid">
+      <div class="row">
+        <div class="col-8" id="instructions-pane">
+          <br/>
+          <h1>Instructions:</h1>
+          <div class="my-3 pl-5">
+            <ul>
+              <li>
+                Help us make search systems (i.e. Google) smarter by teaching them to answer geographically-dependent questions.
+              </li>
+              <li>
+                In this task, you will be have to <b>identify questions whose answers change based on location</b>. 
+              </li>
+              <li>
+                Read through these instructions and examples to get started!
+              </li>
+            </ul>
+            <h4>Steps:</h4>
+            <ol>
+              <li class="my-2">
+                For each question on the right, <b>identify whether or not the answer can change depending on the location</b> and select one of the following options:
+                <ul>
+                  <li>
+                    <b>Yes:</b> The answer to this quesion can change depending on the location.
+                  </li>
+                  <li>
+                    <b>No:</b> The answer to this quesion <u>does not</u> change depending on the location.
+                  </li>
+                  <li>
+                    <b>Maybe:</b> You should select this option if <b>you understand the question, but cannot determine if its answer changes</b> based on location.
+                    <ul>
+                      <li>
+                        Before selecting this option, you should perform a <b>brief Google search</b> to see if the answer has changed. If you still can't tell, then select this option.
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <b>Malformed Question:</b> Respond with this option if you <b>cannot make sense of the question</b>.
+                  </li>
+                </ul>
+
+              </li>
+              <li class="my-2">
+                <b>Submit</b> the HIT by clicking the button at the bottom form to the right after you have responded for each question.
+              </li>
+            </ol>
+          </div>
+          <hr/>
+          <h4><b>Before you begin</b>, read through these examples</h4>
+          <br/>
+          <div>
+            <div class="alert text-dark" style="background-color: #EEEEEE">
+              <h5><b>Example 1</b></h5>
+              <hr />
+              <div class="row">
+                <div class="col-6">
+                  <fieldset disabled>
+                    <h5><b>Question:</b> Who is the president?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input me-1" type="radio" value="" checked>
+                        <b>Yes</b>
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        No
+                      </label>
+                      <label class="list-group-item list-group-item-warning">
+                        <input class="form-check-input me-1" name="isGeo4" type="radio" value="">
+                        Maybe
+                      </label>
+                      <label class="list-group-item list-group-item-dark">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Malformed Question
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="col-6">
+                  <h5><b>Explanation:</b></h5>
+                  <p class="pl-5">
+                    Many countries around the world have presidents. Therefore, the answer to this question is different depending on which of these countries the asker is in.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="alert text-dark" style="background-color: #EEEEEE">
+              <h5><b>Example 2</b></h5>
+              <hr />
+              <div class="row">
+                <div class="col-6">
+                  <fieldset disabled>
+                    <h5><b>Question:</b> When was the last time we won the world cup?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input me-1" type="radio" value="" checked>
+                        <b>Yes</b>
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        No
+                      </label>
+                      <label class="list-group-item list-group-item-warning">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Maybe
+                      </label>
+                      <label class="list-group-item list-group-item-dark">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Malformed Question
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="col-6">
+                  <h5><b>Explanation:</b></h5>
+                  <p class="pl-5">
+                    "We" in this question is used to refer to the country that the asker is in. Becasuse the answer to this question is
+                    different for each country, the answer depends on which country the asker is in.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="alert text-dark" style="background-color: #EEEEEE">
+              <h5><b>Example 3</b></h5>
+              <hr />
+              <div class="row">
+                <div class="col-6">
+                  <fieldset disabled>
+                    <h5><b>Question:</b> How many gold medals did the USA win?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input me-1" type="radio" value="" checked>
+                        <b>No</b>
+                      </label>
+                      <label class="list-group-item list-group-item-warning">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Maybe
+                      </label>
+                      <label class="list-group-item list-group-item-dark">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Malformed Question
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="col-6">
+                  <h5><b>Explanation:</b></h5>
+                  <p class="pl-5">
+                    Because the question specifies the location it's asking about, answer to is the same regardless of where the asker is. Therefore, the correct response is <b>No</b>.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="alert text-dark" style="background-color: #EEEEEE">
+              <h5><b>Example 4</b></h5>
+              <hr />
+              <div class="row">
+                <div class="col-6">
+                  <fieldset disabled>
+                    <h5><b>Question:</b> How many goals did she score?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input me-1" type="radio" value="" checked>
+                        <b>No</b>
+                      </label>
+                      <label class="list-group-item list-group-item-warning">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Maybe
+                      </label>
+                      <label class="list-group-item list-group-item-dark">
+                        <input class="form-check-input me-1" type="radio" value="">
+                        Malformed Question
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="col-6">
+                  <h5><b>Explanation:</b></h5>
+                  <p class="pl-5">
+                    This question is perfectly well formed and has many possible answers, but the correct answer does not depend the asker's location. Therefore, the correct response is <b>No</b>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4" id="right-pane">
+          <div class="alert alert-primary my-2">
+            <h5><b>Question:</b> ${QUESTION_0}</h5>
+            <div class="list-group list-group-horizontal">
+              <label class="list-group-item list-group-item-success">
+                <input class="form-check-input me-1" name="isGeo0" type="radio" value="Yes" autocomplete="off">
+                Yes
+              </label>
+              <label class="list-group-item list-group-item-danger">
+                <input class="form-check-input me-1" name="isGeo0" type="radio" value="No" autocomplete="off">
+                No
+              </label>
+              <label class="list-group-item list-group-item-warning">
+                <input class="form-check-input me-1" name="isGeo0" type="radio" value="Maybe" autocomplete="off">
+                Maybe
+              </label>
+              <label class="list-group-item list-group-item-dark">
+                <input class="form-check-input me-1" name="isGeo0" type="radio" value="Unknown" autocomplete="off">
+                Malformed Question
+              </label>
+            </div>
+          </div>
+          <div class="alert alert-primary my-2">
+            <h5><b>Question:</b> ${QUESTION_1}</h5>
+            <div class="list-group list-group-horizontal">
+              <label class="list-group-item list-group-item-success">
+                <input class="form-check-input me-1" name="isGeo1" type="radio" value="Yes" autocomplete="off">
+                Yes
+              </label>
+              <label class="list-group-item list-group-item-danger">
+                <input class="form-check-input me-1" name="isGeo1" type="radio" value="No" autocomplete="off">
+                No
+              </label>
+              <label class="list-group-item list-group-item-warning">
+                <input class="form-check-input me-1" name="isGeo1" type="radio" value="Maybe" autocomplete="off">
+                Maybe
+              </label>
+              <label class="list-group-item list-group-item-dark">
+                <input class="form-check-input me-1" name="isGeo1" type="radio" value="Unknown" autocomplete="off">
+                Malformed Question
+              </label>
+            </div>
+          </div>
+          <div class="alert alert-primary my-2">
+            <h5><b>Question:</b> ${QUESTION_2}</h5>
+            <div class="list-group list-group-horizontal">
+              <label class="list-group-item list-group-item-success">
+                <input class="form-check-input me-1" name="isGeo2" type="radio" value="Yes" autocomplete="off">
+                Yes
+              </label>
+              <label class="list-group-item list-group-item-danger">
+                <input class="form-check-input me-1" name="isGeo2" type="radio" value="No" autocomplete="off">
+                No
+              </label>
+              <label class="list-group-item list-group-item-warning">
+                <input class="form-check-input me-1" name="isGeo2" type="radio" value="Maybe" autocomplete="off">
+                Maybe
+              </label>
+              <label class="list-group-item list-group-item-dark">
+                <input class="form-check-input me-1" name="isGeo2" type="radio" value="Unknown" autocomplete="off">
+                Malformed Question
+              </label>
+            </div>
+          </div>
+          <div class="alert alert-primary my-2">
+            <h5><b>Question:</b> ${QUESTION_3}</h5>
+            <div class="list-group list-group-horizontal">
+              <label class="list-group-item list-group-item-success">
+                <input class="form-check-input me-1" name="isGeo3" type="radio" value="Yes" autocomplete="off">
+                Yes
+              </label>
+              <label class="list-group-item list-group-item-danger">
+                <input class="form-check-input me-1" name="isGeo3" type="radio" value="No" autocomplete="off">
+                No
+              </label>
+              <label class="list-group-item list-group-item-warning">
+                <input class="form-check-input me-1" name="isGeo3" type="radio" value="Maybe" autocomplete="off">
+                Maybe
+              </label>
+              <label class="list-group-item list-group-item-dark">
+                <input class="form-check-input me-1" name="isGeo3" type="radio" value="Unknown" autocomplete="off">
+                Malformed Question
+              </label>
+            </div>
+          </div>
+          <div class="alert alert-primary my-2">
+            <h5><b>Question:</b> ${QUESTION_4}</h5>
+            <div class="list-group list-group-horizontal">
+              <label class="list-group-item list-group-item-success">
+                <input class="form-check-input me-1" name="isGeo4" type="radio" value="Yes" autocomplete="off">
+                Yes
+              </label>
+              <label class="list-group-item list-group-item-danger">
+                <input class="form-check-input me-1" name="isGeo4" type="radio" value="No" autocomplete="off">
+                No
+              </label>
+              <label class="list-group-item list-group-item-warning">
+                <input class="form-check-input me-1" name="isGeo4" type="radio" value="Maybe" autocomplete="off">
+                Maybe
+              </label>
+              <label class="list-group-item list-group-item-dark">
+                <input class="form-check-input me-1" name="isGeo4" type="radio" value="Unknown" autocomplete="off">
+                Malformed Question
+              </label>
+            </div>
+          </div>
+          <div class="alert alert-danger" id='submitErrorAlert' style="display: none;">
+            <h5>Please make sure that all questions have a response</h5>
+          </div>
+          <button class="btn btn-primary my-2" type="button" id='submitResponse'>
+            Submit HIT
+          </button>
+        </div>
+        <form id="mturkForm" name="mturk_form" method="post" autocomplete="off">
+          <div class="form-group">
+            <input id="assignmentId" name="assignmentId" type='hidden' readOnly />
+            <input id="hitId" name="hitId" type='hidden' readOnly />
+            <input id="workerId" name="workerId" type='hidden' readOnly />
+            <input id="queriesUsed" name="queriesUsed" type='hidden' readOnly />
+            <input id="articlesUsed" name="articlesUsed" type='hidden' readOnly />
+            <input id="answerData" name="answerData" type='hidden' readOnly />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+
+    <script>
+      function turkGetParam( name, defaultValue ) { 
+          var regexS = "[\?&]"+name+"=([^&#]*)"; 
+          var regex = new RegExp( regexS ); 
+          var tmpURL = window.location.href; 
+          var results = regex.exec( tmpURL ); 
+          if( results == null ) { 
+              return defaultValue; 
+          } else { 
+              return results[1];    
+          } 
+      }
+      
+      function decode(strToDecode)
+      {
+          var encoded = strToDecode;
+          return unescape(encoded.replace(/\+/g,  " "));
+      }
+      
+      function turkGetSubmitToHost() {
+          var defaultHost = "https://www.mturk.com";
+          var submitToHost = decode(turkGetParam("turkSubmitTo", defaultHost));
+          if (stringStartsWith(submitToHost, "https://")) {
+              return submitToHost;
+          }
+          if (stringStartsWith(submitToHost, "http://")) {
+              return submitToHost;
+          }
+          if (stringStartsWith(submitToHost, "//")) {
+              return submitToHost;
+          }
+          return defaultHost;
+      }
+      
+      // Inlined functionality for String.startsWith as IE does not support that method.
+      // Function body from:
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill
+      function stringStartsWith(str, search, pos) {
+          pos = (!pos || pos < 0) ? 0 : +pos;
+          return str.substring(pos, pos + search.length) === search;
+      }
+
+      $(document).ready(function() {
+          $("#submitResponse").click(function() {
+              if ($('input[name=isGeo0]:checked').val() &&
+                  $('input[name=isGeo1]:checked').val() &&
+                  $('input[name=isGeo2]:checked').val() &&
+                  $('input[name=isGeo3]:checked').val() &&
+                  $('input[name=isGeo4]:checked').val()) {
+                  submitHIT();
+              } else {
+                  $("#submitErrorAlert").show();
+              }
+          });
+      });
+
+      function submitHIT() {
+          $("#mturkForm")[0].action = turkGetSubmitToHost() + "/mturk/externalSubmit";
+          $("#assignmentId").val(turkGetParam('assignmentId', ""));
+          $("#hitId").val(turkGetParam('hitId', ""));
+          $("#workerId").val(turkGetParam('workerId', ""));
+          let all_answer_data = {
+              'is_geo': [$('input[name=isGeo0]:checked').val(),
+                         $('input[name=isGeo1]:checked').val(),
+                         $('input[name=isGeo2]:checked').val(),
+                         $('input[name=isGeo3]:checked').val(),
+                         $('input[name=isGeo4]:checked').val()],
+              'assignment_id': $("#assignmentId").val(),
+              'worker_id': $("#workerId").val(),
+          };
+          $("#answerData").val(JSON.stringify(all_answer_data));
+          $("#mturkForm").submit();
+      }
+    </script>
+  </body>
+</html>

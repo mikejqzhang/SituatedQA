@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>TemporalQA Annotations</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <style>
+      #wikipedia-pane {
+          height: 600px;
+          padding-top: 0px;
+          padding-right: 0px;
+          padding-bottom: 0px;
+          padding-left: 0px;
+          overflow: auto;
+      }
+
+      #loading-pane {
+          background-color: #EBDEF0;
+          height: 600px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 15px;
+          padding-bottom: 0px;
+          padding-left: 15px;
+      }
+
+      #results-pane {
+          background-color: #EBDEF0;
+          height: 600px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 15px;
+          padding-bottom: 0px;
+          padding-left: 15px;
+      }
+
+      #searchResultsVis span {
+          cursor: pointer;
+          color: blue;
+          text-decoration: underline;
+      }
+      #searchResultsVis span:hover {
+          text-decoration: none;
+      }
+      #searchResultsVis p {
+          padding-left: 25px;
+      }
+
+      
+      #instructions-pane {
+          background-color: #EBDEF0;
+          height: 600px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 15px;
+          padding-bottom: 0px;
+          padding-left: 15px;
+      }
+      
+      #left-pane {
+          background-color: #EEEEEE;
+          height: 650px;
+          overflow: auto;
+          padding-top: 0px;
+          padding-right: 0px;
+          padding-bottom: 0px;
+          padding-left: 0px;
+      }
+
+      #right-pane {
+          background-color: #EEEEEE;
+          height: 650px;
+          overflow: auto;
+      }
+
+      #navbar {
+          height: 50px;
+      }
+      
+      hr {
+          height: 1px;
+          background-color: #ccc;
+          border: none;
+      }
+
+      .list-group {
+          padding-left: 30px;
+          padding-top: 15px;
+      }
+
+      .list-group-item {
+          padding-left: 40px;
+          padding-right: 20px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div role="main" class="container-fluid">
+      <div class="row">
+        <div class="col-8" id="left-pane">
+          <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item dropdown active">
+                  <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    View Suggested Articles Here
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">${SEARCH_RESULTS}</div>
+                </li>
+              </ul>
+              <div class="input-group">
+                <input id="searchInput" type="text" class="form-control" placeholder="Search for new articles here" autocomplete="off">
+                <span class="input-group-append">
+                  <button id="newSearchBtn" class="btn btn-success" type="button">New Search</button>
+                  <button id="viewResultsBtn" class="btn text-nowrap btn-primary">Toggle Search Results</button>
+                  <button id="viewInstructionsBtn" class="btn text-nowrap btn-danger">Toggle Instructions</button>
+                </span>
+              </div>
+            </div>
+          </nav>
+          <div id="instructions-pane">
+            <br/>
+            <h1>Instructions:</h1>
+            <div class="my-3 pl-5">
+              <ul>
+                <li>
+                  Help us make search systems (i.e. Google) smarter by teaching them to identify past and present answers to your questions!
+                </li>
+                <li>
+                  In this task, you will be asked to <b>verify</b> responses to "What is the current and the previous answer to this question?"
+                </li>
+                <li>
+                  If you find that all the provided responses are incorrect, you will be asked to provide one on your own.
+                </li>
+                <li>
+                  <b>Read through these instructions and examples below to get started!</b>
+                </li>
+              </ul>
+              <h5>Steps:</h5>
+              <ol>
+                <li class="my-2">
+                  <b>Read each response</b> and use <b>suggested wikipedia articles in the dropdown menu above</b> to determine whether each response is correct or not.
+                  <ul>
+                    <li>You may also have to <b>enter a google search query</b> in the bar above to find the answer to the question.</li>
+                    <li>Click the "New Search" button to enter your search.</li>
+                    <li>We will then show you Google's top suggested Wikipedia articles for your query.</li>
+                    <li><b>Common Mistake 1:</b> A common mistake is with "next" question. For example, answer to <i>When are the next summer olympics?</i> was <i>2016</i> starting in <i>2012</i>.</li>
+                    <li><b>Common Mistake 2:</b> Another common mistake is with questions about records. The previous answer to a question like "Who has the most ___" isn't always the same as the current answer to "Who has the second most ___". <b>Please see example 4 below</b>.</li>
+                  </ul>
+                <li>Each response consists of a <b>current answer</b> and a <b>previous answer</b>, as well as the <b>dates when each answer started to apply</b>.</li>
+                  <ul>
+                    <li>Fields marked <b>N/A</b> mean that the answer could not be found. Responses that incorrectly mark a field as <b>N/A</b> should be marked as <b>incorrect</b> (See Example 1 below).</li>
+                    <li>Some questions <b>may have multiple correct answers</b> based on different interpretations. Please mark whether or not each response <b>is correct for some interpretation</b> (see Example 2 and 3 below).</li>
+                    <li>If the answer to the question is a list of possible answers, responses need to have at least one.</li>
+                  </ul>
+                </li>
+                <li>If all the responses above are incorrect, or if you find that there is a better response not listed, you will be asked to enter your own response to the question.</li>
+                  <ul>
+                    <li>It is often enough to fix the provided responses above with small tweaks.</li>
+                    <li>Please make sure your responses are completely filled out and use the "Missing" button to mark fields you are unable to fill out.</li>
+                    <li><b>When entering a date</b>, make sure it contains the year (ex. "1997" or "2021")</li>
+                  </ul>
+                <li class="my-2">
+                  <b>Submit</b> the HIT by clicking the button at the bottom form to the right.
+                </li>
+              </ol>
+            </div>
+            <hr/>
+            <div class="row">
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 1, Response 1:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> Who is the president of the US?</h5>
+                    <br/>
+                    <h5><b>Response 1:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">Joe Biden</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">2020</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">Donald Trump</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">2016</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                      <input class="form-check-input" type="radio" autocomplete="off" checked>Yes</label>
+                      <label class="list-group-item list-group-item-danger">
+                      <input class="form-check-input" type="radio" autocomplete="off">No</label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 1, Response 2:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> Who is the president of the US?</h5>
+                    <br/>
+                    <h5><b>Response 2:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">Joe Biden</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">2020</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">N/A</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">N/A</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input" type="radio" autocomplete="off">
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input" type="radio" autocomplete="off" checked>
+                        No
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert">
+                  <h3>Example 1, Explanation:</h3>
+                  <hr/>
+                  <p>
+                    Response 2 is incorrect because it wrongfully marked the previous answer and its start date as N/A.
+                    <br/>
+                    <br/>
+                    Response 1 shows the answers that Response 2 should've provided.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 2, Response 1:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> Where was the final game of the world series played?</h5>
+                    <br/>
+                    <h5><b>Response 1:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">Arlington, TX</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">2020</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">Houston, TX</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">2019</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                      <input class="form-check-input" type="radio" autocomplete="off" checked>Yes</label>
+                      <label class="list-group-item list-group-item-danger">
+                      <input class="form-check-input" type="radio" autocomplete="off">No</label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 2, Response 2:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> Where was the final game of the world series played?</h5>
+                    <br/>
+                    <h5><b>Response 2:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">Globe Life Field</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">2020</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">Minute Maid Park</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">2019</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input" type="radio" autocomplete="off" checked>
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input" type="radio" autocomplete="off">
+                        No
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert">
+                  <h3>Example 2, Explanation:</h3>
+                  <hr/>
+                  <p>
+                    Both responses are correct for their respective interpretations.
+                    <br/>
+                    <br/>
+                    Response 1 is interpreting the question as asking about the city where the game was played.
+                    <br/>
+                    <br/>
+                    Response 2 is interpreting it as asking about the stadium where the game was played. 
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 3, Response 1:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> MLB record for most wins in a season?</h5>
+                    <br/>
+                    <h5><b>Response 1:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">Seattle Mariners</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">2001</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">Chicago Cubs</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">1906</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                      <input class="form-check-input" type="radio" autocomplete="off" checked>Yes</label>
+                      <label class="list-group-item list-group-item-danger">
+                      <input class="form-check-input" type="radio" autocomplete="off">No</label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 3, Response 2:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> MLB record for most wins in a season?</h5>
+                    <br/>
+                    <h5><b>Response 2:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">116</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">1906</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">103</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">1902</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input" type="radio" autocomplete="off" checked>
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input" type="radio" autocomplete="off">
+                        No
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert">
+                  <h3>Example 3, Explanation:</h3>
+                  <hr/>
+                  <p>
+                    Both of these answers are correct.
+                    <br/>
+                    <br/>
+                    Response 1 interpreted this question as asking about the team who holds the record which was set by the Chicago Cubs in 1906 then tied by the Seattle Mariners in 2001.
+                    <br/>
+                    <br/>
+                    Response 2 interpreted this question as asking about the record number of wins which was 103 set by the Chicago Cubs in 1906 (the number of wins didnt' change when the Seattle Mariners tied it).
+                    The previous record before then was 103 which was set in 1902.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 4, Response 1:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> What nba player has the most all star selections?</h5>
+                    <br/>
+                    <h5><b>Response 1:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">Kareem Abdul-Jabbar</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">1989</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">Kobe Bryant</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">2016</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                      <input class="form-check-input" type="radio" autocomplete="off">Yes</label>
+                      <label class="list-group-item list-group-item-danger">
+                      <input class="form-check-input" type="radio" autocomplete="off" checked>No</label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert text-dark" style="background-color: #EEEEEE">
+                  <fieldset disabled>
+                    <h3>Example 4, Response 2:</h3>
+                    <hr/>
+                    <h5><b>Question:</b> What nba player has the most all star selections?</h5>
+                    <br/>
+                    <h5><b>Response 2:</b></h5>
+                    <ul>
+                      <li>
+                        <b>Current answer:</b>
+                        <p class="pl-4">Kareem Abdul-Jabbar</p>
+                      </li>
+                      <li>
+                        <b>Date when the current answer started to be true:</b>
+                        <p class="pl-4">1985</p>
+                      </li>
+                      <li>
+                        <b>Previous answer:</b>
+                        <p class="pl-4">Jerry West</p>
+                      </li>
+                      <li>
+                        <b>Date when the previous answer started to be true:</b>
+                        <p class="pl-4">1974</p>
+                      </li>
+                    </ul>
+                    <hr/>
+                    <h5>Is this response correct?</h5>
+                    <div class="list-group list-group-horizontal">
+                      <label class="list-group-item list-group-item-success">
+                        <input class="form-check-input" type="radio" autocomplete="off" checked>
+                        Yes
+                      </label>
+                      <label class="list-group-item list-group-item-danger">
+                        <input class="form-check-input" type="radio" autocomplete="off">
+                        No
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="alert">
+                  <h3>Example 4, Explanation:</h3>
+                  <hr/>
+                  <p>
+                    Response 1 is incorrect because, although Kobe Bryant has the second most all-star selections, he never had the most because Kareem Abdul-Jabbar set the record Kobe Bryant reached the second most.
+                    <br/>
+                    <br/>
+                    Response 2 is correct because, although Jerry West as of now is tied for the seventh most all-star selections, he held the record until Kareem Abdul-Jabbar first broke it in 1985. Players since then have had more appearances than Jerry West, but never more than Kareem Abdul-Jabbar.
+                    <br/>
+                    <br/>
+                    The previous answer's start date should <b>never</b> come before the current answer's start date.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="loading-pane" style="display: none;"><br/><h1>Loading...</h1></div>
+          <div id="results-pane" style="display: none;">
+            <br/>
+            <h1>Search Results:</h1>
+            <div class="alert alert-primary my-2">
+              <h3>Showing Results For: <u id="searchQueryVis">Enter a new search above</u></h3>
+            </div>
+            <div id="searchResultsVis"> </div>
+          </div>
+          <iframe id="wikipedia-pane" src="about:blank" name="wikipedia-pane" class="container-fluid" frameBorder="0" style="display: none;"></iframe>
+        </div>
+        <div class="col-4" id="right-pane">${ANSWERS}
+          <div class="alert alert-primary my-2">
+            <h5><b>Question:</b> ${QUESTION}</h5>
+            <br/>
+            <h5><b>Your Response:</b></h5>
+            <h6 class="pl-4"><i>(Only necessary if all of the responses above are incorrect, or if you find there is a better one)</i>:</h6>
+            <br/>
+            <label>
+              Enter the <b>current answer</b> to this question
+            </label>
+            <div class="input-group">
+              <input type="curAnswer" class="form-control form-field" id="curAnswerInput" name="curAnswerInput" placeholder="Current Answer..." autocomplete="off">
+            </div> 
+            <label class="my-2">Enter the <b>date when the current answer started to be true</b></label>
+            <div class="input-group">
+              <input type="text" id="curAnswerStartInput" name="curAnswerStartInput" class="form-control form-field" placeholder="Current Answer Start Date..." autocomplete="off">
+              <span class="input-group-append">
+                <button id="curAnswerStartBlank" class="btn btn-secondary form-field" type="button">Missing</button>
+              </span>
+            </div> 
+            <hr/>
+            <label class="my-2">
+              Enter the <b>previous answer</b> to this question
+            </label>
+            <div class="input-group">
+              <input type="prevAnswer" class="form-control form-field" id="prevAnswerInput" name="prevAnswerInput" placeholder="Previous Answer..." autocomplete="off">
+              <span class="input-group-append">
+                <button id="prevAnswerBlank" class="btn btn-secondary form-field" type="button">Missing</button>
+              </span>
+            </div> 
+            <label class="my-2">
+              <label class="my-2">Enter the <b>date when the previous answer started to be true</b></label>
+            </label>
+            <div class="input-group">
+              <input type="text" id="prevAnswerStartInput" name="prevAnswerStartInput" class="form-control form-field" placeholder="Previous Answer Start Date..." autocomplete="off">
+              <span class="input-group-append">
+                <button id="prevAnswerStartBlank" class="btn btn-secondary form-field" type="button">Missing</button>
+              </span>
+            </div> 
+          </div>
+          <div class="alert alert-danger" id='submitErrorAlert' style="display: none;">
+            <h5>1) Please make sure that all responses have been marked "Yes" or "No"</h5>
+            <h5>2) If all the provided responses are incorrect, please make sure you provide one of your own and that it is completely filled out.</h5>
+          </div>
+          <button class="btn btn-primary my-2" type="button" id='submitResponse'>
+            Submit HIT
+          </button>
+          <input id="queriesUsed" name="queriesUsed" type='hidden' readOnly />
+          <input id="articlesUsed" name="articlesUsed" type='hidden' readOnly />
+          <form id="mturkForm" name="mturk_form" method="post" autocomplete="off">
+            <div class="form-group">
+              <input id="assignmentId" name="assignmentId" type='hidden' readOnly />
+              <input id="hitId" name="hitId" type='hidden' readOnly />
+              <input id="workerId" name="workerId" type='hidden' readOnly />
+              <input id="answerData" name="answerData" type='hidden' readOnly />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <script>
+      function turkGetParam( name, defaultValue ) { 
+          var regexS = "[\?&]"+name+"=([^&#]*)"; 
+          var regex = new RegExp( regexS ); 
+          var tmpURL = window.location.href; 
+          var results = regex.exec( tmpURL ); 
+          if( results == null ) { 
+              return defaultValue; 
+          } else { 
+              return results[1];    
+          } 
+      }
+      
+      function decode(strToDecode)
+      {
+          var encoded = strToDecode;
+          return unescape(encoded.replace(/\+/g,  " "));
+      }
+      
+      function turkGetSubmitToHost() {
+          var defaultHost = "https://www.mturk.com";
+          var submitToHost = decode(turkGetParam("turkSubmitTo", defaultHost));
+          if (stringStartsWith(submitToHost, "https://")) {
+              return submitToHost;
+          }
+          if (stringStartsWith(submitToHost, "http://")) {
+              return submitToHost;
+          }
+          if (stringStartsWith(submitToHost, "//")) {
+              return submitToHost;
+          }
+          return defaultHost;
+      }
+      
+      // Inlined functionality for String.startsWith as IE does not support that method.
+      // Function body from:
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill
+      function stringStartsWith(str, search, pos) {
+          pos = (!pos || pos < 0) ? 0 : +pos;
+          return str.substring(pos, pos + search.length) === search;
+      }
+
+      function newSearchCallback(responseJSON) {
+          $("#searchQueryVis").text(responseJSON.queries.request[0].searchTerms);
+          $("#searchResultsVis").empty();
+          responseJSON.items.map(ex => {
+              $("#searchResultsVis").append("<span class='searchResult' href='"+ ex.link + "'>" + ex.htmlTitle + "</a>");
+              $("#searchResultsVis").append("<p>" + ex.htmlSnippet + "</p>");
+          });
+          $("#searchResultsVis span").click(function() {
+              let usedArticles = []
+              if ($("#articlesUsed").val()) {
+                  usedArticles = JSON.parse($("#articlesUsed").val());
+              }
+              usedArticles.push({"link": $(this).attr("href"), "title": $(this).text()})
+              $("#articlesUsed").val(JSON.stringify(usedArticles)); 
+              $("#wikipedia-pane").attr("src", $(this).attr("href"));
+              $('#instructions-pane').hide();
+              $('#results-pane').hide();
+              $('#loading-pane').hide();
+              $('#wikipedia-pane').show();
+          });
+          $('#instructions-pane').hide();
+          $('#wikipedia-pane').hide();
+          $('#loading-pane').hide();
+          $('#results-pane').show();
+      }
+
+      $(document).ready(function() {
+          $(".search-result").click(function() {
+              $("#wikipedia-pane").attr("src", $(this).attr("href"));
+              $('#instructions-pane').hide();
+              $('#wikipedia-pane').show();
+          });
+
+          $("#newSearchBtn").click(function() {
+              let search_query = $("#searchInput").val();
+              if ($("#searchQueryVis").text() == $("#searchInput").val()) {
+                  $('#wikipedia-pane').hide();
+                  $('#loading-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#results-pane').show();
+              } else {
+                  let usedQueries = []
+                  if ($("#queriesUsed").val()) {
+                      usedQueries = JSON.parse($("#queriesUsed").val());
+                  }
+                  usedQueries.push(search_query)
+                  $("#queriesUsed").val(JSON.stringify(usedQueries)); 
+                  // ADD PERSONAL API KEYS HERE
+                  let query_url = ("https://www.googleapis.com/customsearch/v1?"
+                                   + "key=API_KEY_HERE&"
+                                   + "cx=CX_KEY_HERE&"
+                                   + "q=" + escape(search_query));
+                  $('#instructions-pane').hide();
+                  $('#wikipedia-pane').hide();
+                  $('#results-pane').hide();
+                  $('#loading-pane').show();
+                  $.getJSON(query_url, newSearchCallback);
+              }
+          });
+
+          $("#viewResultsBtn").click(function() {
+              if ($('#results-pane').is(":hidden") && $('#searchResultsVis').children().length > 0) {
+                  $('#wikipedia-pane').hide();
+                  $('#loading-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#results-pane').show();
+              } else if ($('#wikipedia-pane')[0].src != 'about:blank') {
+                  $('#loading-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#wikipedia-pane').show();
+              } else {
+                  $('#loading-pane').hide();
+                  $('#wikipedia-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').show();
+              }
+          });
+
+          $("#viewInstructionsBtn").click(function() {
+              if ($('#instructions-pane').is(":hidden")) {
+                  $('#wikipedia-pane').hide();
+                  $('#loading-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').show();
+              } else if ($('#wikipedia-pane')[0].src != 'about:blank') {
+                  $('#loading-pane').hide();
+                  $('#results-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#wikipedia-pane').show();
+              } else if ($('#searchResultsVis').children().length > 0) {
+                  $('#loading-pane').hide();
+                  $('#wikipedia-pane').hide();
+                  $('#instructions-pane').hide();
+                  $('#results-pane').show();
+              }
+          });
+
+          $("#curAnswerStartBlank").click(function() {
+              if ($("#curAnswerStartBlank").text() == "Missing") {
+                  $("#curAnswerStartBlank").text("Undo");
+                  $("#curAnswerStartInput").val("N/A");
+                  $("#curAnswerStartInput").prop("disabled", true)
+              } else {
+                  $("#curAnswerStartBlank").text("Missing");
+                  $("#curAnswerStartInput").val("");
+                  $("#curAnswerStartInput").prop("disabled", false)
+              }
+          });
+          $("#prevAnswerBlank").click(function() {
+              if ($("#prevAnswerBlank").text() == "Missing") {
+                  $("#prevAnswerBlank").text("Undo");
+                  $("#prevAnswerInput").val("N/A");
+                  $("#prevAnswerInput").prop("disabled", true)
+              } else {
+                  $("#prevAnswerBlank").text("Missing");
+                  $("#prevAnswerInput").val("");
+                  $("#prevAnswerInput").prop("disabled", false)
+              }
+          });
+          $("#prevAnswerStartBlank").click(function() {
+              if ($("#prevAnswerStartBlank").text() == "Missing") {
+                  $("#prevAnswerStartBlank").text("Undo");
+                  $("#prevAnswerStartInput").val("N/A");
+                  $("#prevAnswerStartInput").prop("disabled", true)
+              } else {
+                  $("#prevAnswerStartBlank").text("Missing");
+                  $("#prevAnswerStartInput").val("");
+                  $("#prevAnswerStartInput").prop("disabled", false)
+              }
+          });
+
+          $("#submitResponse").click(function() {
+              var all_wrong = true;
+              $("input.is_correct_input:checked").each(function() {
+                  all_wrong = all_wrong && $(this).val() == "No";
+              });
+              if ($("input.is_correct_input:checked").length != $("input.is_correct_input:not(:checked)").length) {
+                  $("#submitErrorAlert").show();
+              } else if (all_wrong && !($("#curAnswerInput").val() && $("#prevAnswerInput").val()
+                                        && $("#curAnswerStartInput").val() && $("#prevAnswerStartInput").val())) {
+                  $("#submitErrorAlert").show();
+              } else {
+                  submitHIT();
+              }
+          });
+      });
+
+      function submitHIT() {
+          $("#mturkForm")[0].action = turkGetSubmitToHost() + "/mturk/externalSubmit";
+          $("#assignmentId").val(turkGetParam('assignmentId', ""));
+          $("#hitId").val(turkGetParam('hitId', ""));
+          $("#workerId").val(turkGetParam('workerId', ""));
+          let all_answer_data = {
+              'is_correct': $("input.is_correct_input:checked").map(function() {return this.value;}).toArray(),
+              'assignment_id': $("#assignmentId").val(),
+              'worker_id': $("#workerId").val(),
+              "cur_answer": $("#curAnswerInput").val() || null,
+              "cur_answer_start": $("#curAnswerStartInput").val() || null,
+              "prev_answer": $("#prevAnswerInput").val() || null,
+              "prev_answer_start": $("#prevAnswerStartInput").val() || null,
+              "all_queries_used": JSON.parse($("#queriesUsed").val() || null),
+              "all_articles_used": JSON.parse($("#articlesUsed").val() || null),
+          };
+          $("#answerData").val(JSON.stringify(all_answer_data));
+          $("#mturkForm").submit();
+      }
+
+      </script>
+  </body>
+</html>
