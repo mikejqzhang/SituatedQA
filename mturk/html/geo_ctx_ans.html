@@ -105,17 +105,9 @@
       <div class="row">
         <div class="col-8" id="left-pane">
           <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item dropdown active">
-                  <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    View Suggested Articles Here
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">${SEARCH_RESULTS}</div>
-                </li>
-              </ul>
+            <div class="my-2 d-inline w-100">
               <div class="input-group">
-                <input id="searchInput" type="text" class="form-control" placeholder="Search for new articles here" autocomplete="off">
+                <input id="searchInput" type="text" class="form-control" placeholder="Search" autocomplete="off">
                 <span class="input-group-append">
                   <button id="newSearchBtn" class="btn btn-success" type="button">New Search</button>
                   <button id="viewResultsBtn" class="btn text-nowrap btn-primary">Toggle Search Results</button>
@@ -130,38 +122,38 @@
             <div class="my-3 pl-5">
               <ul>
                 <li>
-                  Help us make search systems (i.e. Google) smarter by teaching them to properly handle questions whose answer changes based on the asker's location.
+                  Help us make search systems (i.e. Google) smarter by teaching them to properly answer questions whose answer changes based on the asker's location.
                 </li>
                 <li>
                   For example, the question <i>"Who is the president?"</i> has a different answer if the asker is in the US or if they're in Brazil since both countries have presidents.
                 </li>
                 <li>
-                  In this task, you will be asked to <b>verify</b> responses to "What locations have different answers to this question?"
+                  You will be presented with a question. Your task is to identify <b>locations</b> where the <b>answer</b> to the question is different, and what the answers are.
                 </li>
                 <li>
-                  <b>Read through these instructions and examples below to get started!</b>
+                  Read through these steps and examples below to get started!
                 </li>
               </ul>
               <h5>Steps:</h5>
               <ol>
                 <li class="my-2">
-                  <b>Read each response</b> and use the <b>suggested wikipedia articles in the dropdown menu above</b> to determine whether each response is correct or not.
+                  <b>Read the question on the right.</b>
                 </li>
-                <ul>
-                  <li>You may also <b>use the search bar above</b> to find an article.</li>
-                  <li>Click the <b>New Search</b> button to enter your search.</li>
-                  <li>We will then show you Google's top suggested Wikipedia articles for your query.</li>
-                </ul>
                 <li class="my-2">
                   <b>Verify the location + answer(s) pair</b> by marking it as correct or incorrect
                   <ul>
                     <li>Some questions will have multiple answers, mark yes/no based on whether <b>all answers</b> are correct.
+                    <li><b>Use the search bar above</b> to find an article.</li>
+                    <li>Click the <b>New Search</b> button to enter your search.</li>
+                    <li>We will then show you Google's top suggested Wikipedia articles for your query.</li>
+                    <li>If you response <b>yes</b>, then provide the title of the article where you found the answer.</li>
                   </ul>
                 </li>
                 <li class="my-2">
-                  <b>If there are less than 2 verified responses, please provide up to 2 additional location + answer pairs.</b>
+                  <b>Provide 2 additional location + answer pairs.</b>
                   <ul>
-                    <li>All locations and answers should be different. This includes the locations and answers from the verified responses.</li>
+                    <li>All locations and answers should be unique. This includes the location and answer we provide if you marked it as correct.</li>
+                    <li>For each location/answer pair, you'll also be asked to <b>provide the title of the wikipedia article</b> where you found the answer.</li>
                     <li>If you cannot find another location + answer pair, mark it by selecting the checkbox and move on. <b>This should be a rare occurance.</b></li>
                   </ul>
                 </li>
@@ -214,6 +206,12 @@
                         No
                       </label>
                     </div>
+                    <ul>
+                      <li>
+                        <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                        <input type="text" class="form-control form-field" placeholder="Article Title from Provided Answer" autocomplete="off">
+                      </li>
+                    </ul>
                   </div>
                   <div class="col-4">
                     <h5>New Location #1</h5>
@@ -235,6 +233,9 @@
                       <li>
                         <label class="my-2">Copy the <b>answer from location #1</b> here</label>
                         <input type="text" class="form-control form-field" value="2002" autocomplete="off">
+                      </li>
+                        <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                        <input type="text" class="form-control form-field" value="FIFA World Cup" autocomplete="off">
                       </li>
                     </ul>
                   </div>
@@ -258,6 +259,10 @@
                       <li>
                         <label class="my-2">Copy the <b>answer from location #2</b> here</label>
                         <input type="text" class="form-control form-field" value="2018" autocomplete="off">
+                      </li>
+                      <li>
+                        <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                        <input type="text" class="form-control form-field" value="FIFA World Cup" autocomplete="off">
                       </li>
                     </ul>
                   </div>
@@ -305,6 +310,12 @@
                         No
                       </label>
                     </div>
+                    <ul>
+                      <li>
+                        <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                        <input type="text" class="form-control form-field" value="Social Security Act" autocomplete="off">
+                      </li>
+                    </ul>
                   </div>
                   <div class="col-4">
                     <h5>New Location #1</h5>
@@ -326,6 +337,9 @@
                       <li>
                         <label class="my-2">Copy the <b>answer from location #1</b> here</label>
                         <input type="text" class="form-control form-field" value="1966" autocomplete="off">
+                      </li>
+                        <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                        <input type="text" class="form-control form-field" value="Ministry of Social Security Act 1966" autocomplete="off">
                       </li>
                     </ul>
                   </div>
@@ -350,6 +364,10 @@
                         <label class="my-2">Copy the <b>answer from location #2</b> here</label>
                         <input type="text" class="form-control form-field" value="1991" autocomplete="off">
                       </li>
+                      <li>
+                        <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                        <input type="text" class="form-control form-field" value="Social Security Act 1991" autocomplete="off">
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -367,12 +385,42 @@
           <iframe id="wikipedia-pane" class="container-fluid" frameBorder="0" style="display: none;"></iframe>
         </div>
         <div class="col-4" id="right-pane">
-          <div id="fakeForm">${ANSWERS}
+          <div class="alert alert-primary my-2">
+            <h3>Question:</h3>
+            <p class="text-center"><b><i>${QUESTION}</i></b></p>
+          </div>
+          <div id="fakeForm">
+            <h5>Is This Location + Answer Pair Correct?</h5>
+            <ul>
+              <li>
+                <b>Location:</b>
+                <br/>
+                <span id="origLocation">${ORIGINAL_LOCATION}<span>
+              </li>
+              <li>
+                <b>Answer(s):</b>
+                <br/>
+                ${ORIGINAL_ANSWER}
+              </li>
+            </ul>
+            <div class="list-group list-group-horizontal">
+              <label class="list-group-item list-group-item-success">
+                <input class="form-check-input orig-verify" name="origCorrect" type="radio" value="Yes" autocomplete="off">
+                Yes
+              </label>
+              <label class="list-group-item list-group-item-danger">
+                <input class="form-check-input orig-verify" name="origCorrect" type="radio" value="No" autocomplete="off">
+                No
+              </label>
+            </div>
+            <ul>
+              <li>
+                <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                <input id="article0" name="article0" type="text" class="form-control form-field" placeholder="Article Title from Provided Answer" autocomplete="off" disabled="">
+              </li>
+            </ul>
             <hr/>
-            <h5><b>Question:</b> ${QUESTION}</h5>
-            <br/>
             <h5>New Location #1</h5>
-            <i>(Only necessary there are less than 2 valid responses above)</i>
             <div class="form-check my-2 pl-4">
             </div>
             <ul>
@@ -392,12 +440,13 @@
                 <label class="my-2">Copy the <b>answer from location #1</b> here</label>
                 <input type="text" id="answer1" name="answer1" class="form-control form-field" placeholder="Answer from Location #1" autocomplete="off">
               </li>
+              <li>
+                <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                <input id="article1" name="article1" type="text" class="form-control form-field" placeholder="Article Title from Answer #1" autocomplete="off">
+              </li>
             </ul>
             <hr/>
-            <h5><b>Question:</b> ${QUESTION}</h5>
-            <br/>
             <h5>New Location #2</h5>
-            <i>(Only necessary there is less than 2 valid responses, including the one added by you above)</i>
             <div class="form-check my-2 pl-4">
             </div>
             <ul>
@@ -417,12 +466,17 @@
                 <label class="my-2">Copy the <b>answer from location #2</b> here</label>
                 <input type="text" id="answer2" name="answer2" class="form-control form-field" placeholder="Answer from Location #2" autocomplete="off">
               </li>
+              <li>
+                <label class="my-2">Copy the <b>title of the article</b> where you found this answer</label>
+                <input id="article2" name="article2" type="text" class="form-control form-field" placeholder="Article Title from Answer #2" autocomplete="off">
+              </li>
             </ul>
             <div class="alert alert-danger" id='submitErrorAlert' style="display: none;">
               <h5>Please review the instructions and make sure that:</h5>
               <ul>
-                <li>All reponses are verified as correct or incorrect.</li>
-                <li>If there only 0 or 1 correct verified responses, provide up to two additional responses.</li>
+                <li>The provided location + answer are verified as correct or incorrect.</li>
+                <li>Both new locations are filled out (Location + Answer + Article) or you have marked that there is no possible new location.</li>
+                <li>New locations and their answers are different.</li>
               </ul>
             </div>
           </div>
@@ -504,6 +558,12 @@
                   usedArticles = JSON.parse($("#articlesUsed").val());
               };
               usedArticles.push({"link": $(this).attr("href"), "title": $(this).text()});
+              // $("#article0").append('<option value="' + JSON.stringify({"link": $(this).attr("href"), "title": $(this).text()}) + '">'
+              //                           + $(this).text() + '</option>');
+              // $("#article1").append('<option value="' + JSON.stringify({"link": $(this).attr("href"), "title": $(this).text()}) + '">'
+              //                       + $(this).text() + '</option>');
+              // $("#article2").append('<option value="' + JSON.stringify({"link": $(this).attr("href"), "title": $(this).text()}) + '">'
+              //                       + $(this).text() + '</option>');
               $("#articlesUsed").val(JSON.stringify(usedArticles)); 
               $("#wikipedia-pane").attr("src", $(this).attr("href"));
               $('#instructions-pane').hide();
@@ -518,11 +578,6 @@
       }
 
       $(document).ready(function() {
-          $(".search-result").click(function() {
-              $("#wikipedia-pane").attr("src", $(this).attr("href"));
-              $('#instructions-pane').hide();
-              $('#wikipedia-pane').show();
-          });
           $("#newSearchBtn").click(function() {
               let search_query = $("#searchInput").val();
               if ($("#searchQueryVis").text() == $("#searchInput").val()) {
@@ -537,10 +592,9 @@
                   }
                   usedQueries.push(search_query)
                   $("#queriesUsed").val(JSON.stringify(usedQueries)); 
-                  // ADD PERSONAL API KEYS HERE
                   let query_url = ("https://www.googleapis.com/customsearch/v1?"
-                                   + "key=API_KEY_HERE&"
-                                   + "cx=CX_KEY_HERE&"
+                                   + "key=AIzaSyBakgHGNNaQqC2_nh3HQlP1_HU-obZD8Aw&"
+                                   + "cx=7dd36d3a7fb6c51f5&"
                                    + "q=" + escape(search_query));
                   $('#instructions-pane').hide();
                   $('#wikipedia-pane').hide();
@@ -585,55 +639,73 @@
                   $('#results-pane').show();
               }
           });
+          $('input[name=origCorrect]').click(function() {
+              if ($('input[name=origCorrect]:checked').val() == "Yes") {
+                  $("#article0").prop("disabled", false);
+              } else {
+                  $("#article0").prop("disabled", true);
+              }
+          });
           $("#missing1").click(function() {
               if ($(this).is(':checked')) {
                   $("#location1").prop("disabled", true);
                   $("#answer1").prop("disabled", true);
+                  $("#article1").prop("disabled", true);
               } else {
                   $("#location1").prop("disabled", false);
                   $("#answer1").prop("disabled", false);
+                  $("#article1").prop("disabled", false);
               }
           });
           $("#missing2").click(function() {
               if ($(this).is(':checked')) {
                   $("#location2").prop("disabled", true);
                   $("#answer2").prop("disabled", true);
+                  $("#article2").prop("disabled", true);
               } else {
                   $("#location2").prop("disabled", false);
                   $("#answer2").prop("disabled", false);
+                  $("#article2").prop("disabled", false);
               }
           });
           $("#submitResponse").click(function() {
-              var num_correct = 0;
-              $("input.is_correct_input:checked").each(function() {
-                  num_correct += $(this).val() == "Yes";
-              });
-              if ($("input.is_correct_input:checked").length != $("input.is_correct_input:not(:checked)").length) {
-                  $("#submitErrorAlert").show();
-              } else if (num_correct >= 3) {
-                  submitHIT();
-              } else if (($("#missing1").is(':checked') || ($("#location1").val() && $("#answer1").val()))
-                         && ($("#missing2").is(':checked') || ($("#location2").val() && $("#answer2").val()))) {
+              if (($('input[name=origCorrect]:checked').val() == "No" || ($('input[name=origCorrect]:checked').val() == "Yes" && $("#article0").val()))
+                  && ($("#missing1").is(':checked') || ($("#location1").val()
+                                                        && $("#answer1").val()
+                                                        && $("#article1").val()
+                                                        && $("#location1").val() != $("#origLocation").text().trim()
+                                                        && $("#answer1").val() != $("#origAnswer").text().trim()))
+                  && ($("#missing2").is(':checked') || ($("#location2").val()
+                                                        && $("#answer2").val()
+                                                        && $("#article2").val()
+                                                        && $("#location2").val() != $("#origLocation").text().trim()
+                                                        && $("#answer2").val() != $("#origAnswer").text().trim()))
+                  && (($("#missing2").is(':checked') && $("#missing2").is(':checked'))
+                      || ($("#location1").val() != $("#location2").val() && $("#answer1").val() != $("#answer2").val()))
+                 ) {
                   submitHIT();
               } else {
                   $("#submitErrorAlert").show();
               }
           });
-      });
 
+      });
       function submitHIT() {
           $("#mturkForm")[0].action = turkGetSubmitToHost() + "/mturk/externalSubmit";
           $("#assignmentId").val(turkGetParam('assignmentId', ""));
           $("#hitId").val(turkGetParam('hitId', ""));
           $("#workerId").val(turkGetParam('workerId', ""));
           let all_answer_data = {
-              "is_correct": $("input.is_correct_input:checked").map(function() {return this.value;}).toArray(),
+              "orig_is_correct": $('input[name=origCorrect]:checked').val(),
+              "orig_article": $("#article0").val(),
               "is_missing_1": $("#missing1").is(":checked"),
               "new_location_1": $("#location1").val(),
               "new_answer_1": $("#answer1").val(),
+              "new_article_1": $("#article1").val(),
               "is_missing_2": $("#missing2").is(":checked"),
               "new_location_2": $("#location2").val(),
               "new_answer_2": $("#answer2").val(),
+              "new_article_2": $("#article2").val(),
               "all_queries_used": JSON.parse($("#queriesUsed").val() || null),
               "all_articles_used": JSON.parse($("#articlesUsed").val() || null),
               'assignment_id': $("#assignmentId").val(),

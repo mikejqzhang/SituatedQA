@@ -585,10 +585,9 @@
                   }
                   usedQueries.push(search_query)
                   $("#queriesUsed").val(JSON.stringify(usedQueries)); 
-                  // ADD PERSONAL API KEYS HERE
                   let query_url = ("https://www.googleapis.com/customsearch/v1?"
-                                   + "key=API_KEY_HERE&"
-                                   + "cx=CX_KEY_HERE&"
+                                   + "key=AIzaSyBakgHGNNaQqC2_nh3HQlP1_HU-obZD8Aw&"
+                                   + "cx=7dd36d3a7fb6c51f5&"
                                    + "q=" + escape(search_query));
                   $('#instructions-pane').hide();
                   $('#wikipedia-pane').hide();
